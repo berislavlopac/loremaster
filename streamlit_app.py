@@ -5,16 +5,22 @@ from loremaster.config import settings
 
 
 def main():
-    concept = st.text_area(placeholder="Enter a description of your character concept.")
+    concept = st.text_area(
+        label="Character Concept",
+        placeholder="Enter a description of your character concept.",
+    )
     text_style = st.text_input(
+        label="Textual Style",
         value=settings.DEFAULT_TEXT_STYLE,
         placeholder="Style to be used for textual output.",
     )
     visual_style = st.text_input(
+        label="Visual Style",
         value=settings.DEFAULT_VISUAL_STYLE,
         placeholder="Style to be used for the generated image.",
     )
     paragraphs = st.number_input(
+        label="Number of Paragraphs",
         value=settings.DEFAULT_PARAGRAPHS,
         placeholder="Number of paragraphs in the literary description.",
     )
