@@ -35,4 +35,4 @@ class Settings(BaseSettings):
         return yaml.safe_load((BASE_DIR / self.AGENTS_CONFIG_FILE).read_text())
 
 
-settings = Settings()
+settings = Settings()  # type: ignore [call-arg]

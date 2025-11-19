@@ -1,11 +1,8 @@
-from io import BytesIO
 import base64
-import cloudinary
+
 import cloudinary.uploader
-from cloudinary.utils import cloudinary_url
 from crewai.tools import BaseTool
 from google import genai
-from uuid_extensions import uuid7
 
 from loremaster.config import settings
 
@@ -16,16 +13,11 @@ cloudinary.config(
     secure=True,
 )
 
-from loremaster.config import settings
-
-# Initialize the Gemini client
-# It will automatically pick up the GEMINI_API_KEY from your environment
 gemini_client = genai.Client(api_key=settings.GEMINI_API_KEY)
 
 settings.images_dir.mkdir(exist_ok=True)
 
 
-# Define the custom tool class
 class GeminiImageGeneratorTool(BaseTool):
     name: str = "Gemini Image Generator"
     description: str = (
@@ -47,16 +39,10 @@ class GeminiImageGeneratorTool(BaseTool):
         )
 
         if response.generated_images:
-            # The response contains the image data.
-            # In a production app, you would upload this to a cloud storage (like GCS)
-            # and return the public URL. For simplicity, we'll return a confirmation
-            # and you can add code to save it.
-
-            # --- Example: Save to a file (You'd need io and PIL for this) ---
-            image_data = response.generated_images[0].image.image_bytes
-            encoded_image = base64.b64encode(image_data).decode('utf-8')
+            image_data = response.generated_images[0].image.image_bytes  # type: ignore [union-attr]
+            encoded_image = base64.b64encode(image_data).decode("utf-8")
             return f"data:image/png;base64,{encoded_image}"
         else:
-            raise RuntimeError(
+            raise RuntimeError(  # noqa: TRY003
                 "ERROR: Image generation failed to return a valid image."
             )
