@@ -9,8 +9,16 @@ dependencies = [
     "crewai-tools>=1.4.1",
     "google-genai>=1.50.1",
     "pillow>=12.0.0",
+    "pydantic-settings>=2.12.0",
     "pyyaml>=6.0.3",
     "typer>=0.20.0",
+]
+
+[dependency-groups]
+dev = [
+    "deptry>=0.24.0",
+    "mypy>=1.18.2",
+    "ruff>=0.14.5",
 ]
 
 [build-system]
@@ -22,14 +30,7 @@ packages = ["files_router"]
 
 [tool.uv]
 package = false
-default-groups = "all"
-
-[dependency-groups]
-dev = [
-    "deptry>=0.24.0",
-    "mypy>=1.18.2",
-    "ruff>=0.14.5",
-]
+default-groups = ["dev"]
 
 [tool.mypy]
 files = ["."]

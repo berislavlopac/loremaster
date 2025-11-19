@@ -1,6 +1,6 @@
-from crewai import LLM, Agent, Crew, Process, Task, Flow
+from crewai import LLM, Agent, Flow
 from crewai.flow.flow import and_, listen, start
-from loremaster import config
+from loremaster.config import settings
 
 from loremaster.tools import GeminiImageGeneratorTool
 
@@ -12,16 +12,16 @@ available_tools = {
 
 # --- AGENTS ---
 agents = {}
-for name, conf in config.agents.items():
-    temperature = conf.pop("temperature", config.DEFAULT_TEMPERATURE)
+for name, conf in settings.agents.items():
+    temperature = conf.pop("temperature", settings.DEFAULT_TEMPERATURE)
     tools = [available_tools[tool]() for tool in conf.pop("tools", [])]
     agents[name] = Agent(
         **conf,
-        verbose=config.DEBUG,
+        verbose=settings.DEBUG,
         allow_delegation=False,
         llm=LLM(
-            model=config.GEMINI_MODEL,
-            api_key=config.GEMINI_API_KEY,
+            model=settings.GEMINI_MODEL,
+            api_key=settings.GEMINI_API_KEY,
             temperature=temperature,
         ),
         tools=tools,

@@ -1,22 +1,33 @@
 from pathlib import Path
-
+from pydantic_settings import BaseSettings, SettingsConfigDict
 import yaml
 
-GEMINI_API_KEY = ""
-GEMINI_MODEL = "gemini/gemini-2.5-flash"
-# GEMINI_MODEL = "gemini/gemini-2.5-pro"
-# GEMINI_IMAGE_MODEL = "gemini-2.5-flash-image"
-GEMINI_IMAGE_MODEL = "imagen-4.0-generate-001"
-DEFAULT_TEMPERATURE = 0.8
-DEBUG = True
+BASE_DIR: Path = Path(__file__).parent
 
-DEFAULT_TEXT_STYLE = "General style of fantasy novels."
-DEFAULT_VISUAL_STYLE = "Hand-drawn sketch in sepia tones."
-DEFAULT_PARAGRAPHS = 2
 
-BASE_DIR = Path(__file__).parent
-BASE_IMAGES_DIR = BASE_DIR.parent / "images"
+class Settings(BaseSettings):
+    model_config = SettingsConfigDict(env_prefix='loremaster_', env_file='.env')
 
-AGENTS_CONFIG_FILE = "agents.yaml"
+    GEMINI_API_KEY: str
+    GEMINI_MODEL: str = "gemini/gemini-2.5-flash"
+    GEMINI_IMAGE_MODEL: str = "imagen-4.0-generate-001"
+    DEFAULT_TEMPERATURE: float = 0.8
+    DEBUG: bool = False
 
-agents = yaml.safe_load((BASE_DIR / AGENTS_CONFIG_FILE).read_text())
+    DEFAULT_TEXT_STYLE: str = "General style of fantasy novels."
+    DEFAULT_VISUAL_STYLE: str = "Hand-drawn sketch in sepia tones."
+    DEFAULT_PARAGRAPHS: int = 2
+
+    AGENTS_CONFIG_FILE: str = "agents.yaml"
+    IMAGES_DIR_PATH: str = "images"
+
+    @property
+    def images_dir(self) -> Path:
+        return BASE_DIR / self.IMAGES_DIR_PATH
+
+    @property
+    def agents(self):
+        return yaml.safe_load((BASE_DIR / self.AGENTS_CONFIG_FILE).read_text())
+
+
+settings = Settings()

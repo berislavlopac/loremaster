@@ -3,13 +3,13 @@ from google import genai
 from PIL import Image
 from io import BytesIO
 from time import time
-from loremaster import config
+from loremaster.config import settings
 
 # Initialize the Gemini client
 # It will automatically pick up the GEMINI_API_KEY from your environment
-gemini_client = genai.Client(api_key=config.GEMINI_API_KEY)
+gemini_client = genai.Client(api_key=settings.GEMINI_API_KEY)
 
-config.BASE_IMAGES_DIR.mkdir(exist_ok=True)
+settings.images_dir.mkdir(exist_ok=True)
 
 
 # Define the custom tool class
@@ -25,7 +25,7 @@ class GeminiImageGeneratorTool(BaseTool):
         """
         # Call the Imagen model via the Gemini client
         response = gemini_client.models.generate_images(
-            model= config.GEMINI_IMAGE_MODEL,
+            model= settings.GEMINI_IMAGE_MODEL,
             prompt=prompt,
             config=genai.types.GenerateImagesConfig(
                 number_of_images=1,
@@ -43,7 +43,7 @@ class GeminiImageGeneratorTool(BaseTool):
             image_data = response.generated_images[0].image.image_bytes
             image = Image.open(BytesIO(image_data))
             timestamp = int(time() * 100000)
-            file_path = config.BASE_IMAGES_DIR / f"character-{timestamp}.png"
+            file_path = settings.images_dir / f"character-{timestamp}.png"
             image.save(file_path)
             return file_path
 
