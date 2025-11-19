@@ -1,8 +1,21 @@
+from io import BytesIO
+
+import cloudinary
+import cloudinary.uploader
+from cloudinary.utils import cloudinary_url
 from crewai.tools import BaseTool
 from google import genai
-from PIL import Image
-from io import BytesIO
-from time import time
+from uuid_extensions import uuid7
+
+from loremaster.config import settings
+
+cloudinary.config(
+    cloud_name=settings.CLOUD_NAME,
+    api_key=settings.CLOUD_API_KEY,
+    api_secret=settings.CLOUD_API_SECRET,
+    secure=True,
+)
+
 from loremaster.config import settings
 
 # Initialize the Gemini client
@@ -19,13 +32,13 @@ class GeminiImageGeneratorTool(BaseTool):
         "Generates a high-quality image from a text prompt using the Imagen model."
     )
 
-    def _run(self, prompt: str):
+    def _run(self, prompt: str) -> BytesIO:
         """
         Generates the image and returns a URL or a confirmation message.
         """
         # Call the Imagen model via the Gemini client
         response = gemini_client.models.generate_images(
-            model= settings.GEMINI_IMAGE_MODEL,
+            model=settings.GEMINI_IMAGE_MODEL,
             prompt=prompt,
             config=genai.types.GenerateImagesConfig(
                 number_of_images=1,
@@ -41,12 +54,26 @@ class GeminiImageGeneratorTool(BaseTool):
 
             # --- Example: Save to a file (You'd need io and PIL for this) ---
             image_data = response.generated_images[0].image.image_bytes
-            image = Image.open(BytesIO(image_data))
-            timestamp = int(time() * 100000)
-            file_path = settings.images_dir / f"character-{timestamp}.png"
-            image.save(file_path)
-            return file_path
+            image_id = uuid7()
+            public_image_id = image_id.hex
+
+            upload_result = cloudinary.uploader.upload(
+                BytesIO(image_data), public_id=public_image_id
+            )
+            # secure_url = upload_result["secure_url"]
+
+            # Optimize delivery by resizing and applying auto-format and auto-quality
+            optimize_url, _ = cloudinary_url(
+                public_image_id, fetch_format="auto", quality="auto"
+            )
+            return optimize_url
+
+            # Transform the image: auto-crop to square aspect_ratio
+            # auto_crop_url, _ = cloudinary_url(image_id, width=500, height=500, crop="auto", gravity="auto")
+            # print(auto_crop_url)
 
             # return f"SUCCESS: Image generated using Imagen. You would typically retrieve the image data and save/host it now. Confirmation: {response.generated_images[0].seed}."
         else:
-            raise RuntimeError("ERROR: Image generation failed to return a valid image.")
+            raise RuntimeError(
+                "ERROR: Image generation failed to return a valid image."
+            )

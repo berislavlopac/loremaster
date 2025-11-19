@@ -1,4 +1,5 @@
 from pathlib import Path
+
 from pydantic_settings import BaseSettings, SettingsConfigDict
 import yaml
 
@@ -6,9 +7,13 @@ BASE_DIR: Path = Path(__file__).parent
 
 
 class Settings(BaseSettings):
-    model_config = SettingsConfigDict(env_prefix='loremaster_', env_file='.env')
+    model_config = SettingsConfigDict(env_prefix="loremaster_", env_file=".env")
 
     GEMINI_API_KEY: str
+    CLOUD_NAME: str
+    CLOUD_API_KEY: str
+    CLOUD_API_SECRET: str
+
     GEMINI_MODEL: str = "gemini/gemini-2.5-flash"
     GEMINI_IMAGE_MODEL: str = "imagen-4.0-generate-001"
     DEFAULT_TEMPERATURE: float = 0.8

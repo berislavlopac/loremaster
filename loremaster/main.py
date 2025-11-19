@@ -1,10 +1,14 @@
 from typing import Annotated
+
 import typer
 
 from loremaster import scriptorium
 from loremaster.config import settings
 
-app = typer.Typer(rich_markup_mode="markdown", context_settings={"help_option_names": ["-h", "--help"]})
+app = typer.Typer(
+    rich_markup_mode="markdown",
+    context_settings={"help_option_names": ["-h", "--help"]},
+)
 
 
 @app.command()
@@ -47,9 +51,21 @@ def main(
     flow = scriptorium.LoreMasterFlow()
     flow_output = flow.kickoff(inputs=inputs)
 
-    for name, output in flow_output.items():
-        print("###", name.title(), "###\n")
-        print(f"{output}\n\n")
+    print("### Description ###")
+    print(flow_output.description)
+    print("")
+
+    print("### Literary Description ###")
+    print(flow_output.literary_description)
+    print("")
+
+    print("### Image Prompt ###")
+    print(flow_output.image_prompt)
+    print("")
+
+    print("### Generated Image ###")
+    print("Generated Image")
+    print(flow_output.image_url)
 
 
 if __name__ == "__main__":

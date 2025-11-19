@@ -1,14 +1,13 @@
 from crewai import LLM, Agent, Flow
 from crewai.flow.flow import and_, listen, start
-from loremaster.config import settings
+from pydantic import AnyUrl, BaseModel
 
+from loremaster.config import settings
 from loremaster.tools import GeminiImageGeneratorTool
 
 # --- TOOLS ---
 # The image generator tool will be used by the ArtDirector Agent
-available_tools = {
-    "image_generator": GeminiImageGeneratorTool
-}
+available_tools = {"image_generator": GeminiImageGeneratorTool}
 
 # --- AGENTS ---
 agents = {}
@@ -30,8 +29,15 @@ for name, conf in settings.agents.items():
 
 # --- FLOW ---
 
-class LoreMasterFlow(Flow):
 
+class FlowOutputs(BaseModel):
+    description: str
+    literary_description: str
+    image_prompt: str
+    image_url: AnyUrl
+
+
+class LoreMasterFlow(Flow):
     @start()
     def observe(self):
         """Convert the user input into a detailed description of the character."""
@@ -85,13 +91,13 @@ class LoreMasterFlow(Flow):
             " Image prompt:\n\n{image_prompt}"
         ).format(**self.state)
         result = agent.kickoff(query)
-        self.state["image"] = result
-
+        self.state["image_url"] = result
 
     @listen(and_(describe, illuminate))
     def collect(self):
-        return {
-            "description": self.state["description"],
-            "literary_description": self.state["literary_description"],
-            "image": self.state["image"],
-        }
+        return FlowOutputs(
+            description=str(self.state["description"]),
+            literary_description=str(self.state["literary_description"]),
+            image_prompt=str(self.state["image_prompt"]),
+            image_url=str(self.state["image_url"]),
+        )
