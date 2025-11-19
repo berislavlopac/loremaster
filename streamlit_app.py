@@ -5,13 +5,15 @@ from loremaster.config import settings
 
 
 def main():
-    generate = False
+
 
     with st.form("inputs_form"):
         concept = st.text_area(
             label="Character Concept",
-            value="Fantasy warrior with a sword, getting ready to defend from an attack.",
-            placeholder="Enter a description of your character concept.",
+            placeholder=(
+                "Enter a description of your character concept, for example:"
+                " Fantasy warrior with a sword, getting ready to defend from an attack."
+            )
         )
         text_style = st.text_input(
             label="Textual Style",
@@ -28,9 +30,10 @@ def main():
             value=settings.DEFAULT_PARAGRAPHS,
             placeholder="Number of paragraphs in the literary description.",
         )
-        generate = st.form_submit_button('Generate Character')
+        submit_form = st.form_submit_button('Generate Character')
 
-    if generate:
+
+    if submit_form and concept:
         inputs = {
             "concept": concept,
             "text_style": text_style,
