@@ -40,6 +40,7 @@ def main(
             help="Number of paragraphs in the literary description.",
         ),
     ] = settings.DEFAULT_PARAGRAPHS,
+    plot: Annotated[bool, typer.Option("--plot", help="Generate the plot of the agentic flow. Ignore all other options.")] = False,
 ):
     inputs = {
         "concept": concept,
@@ -49,23 +50,27 @@ def main(
     }
 
     flow = scriptorium.LoreMasterFlow()
-    flow_output = flow.kickoff(inputs=inputs)
 
-    print("### Description ###")
-    print(flow_output.description)
-    print("")
+    if plot:
+        flow.plot()
+    else:
+        flow_output = flow.kickoff(inputs=inputs)
 
-    print("### Literary Description ###")
-    print(flow_output.literary_description)
-    print("")
+        print("### Description ###")
+        print(flow_output.description)
+        print("")
 
-    print("### Image Prompt ###")
-    print(flow_output.image_prompt)
-    print("")
+        print("### Literary Description ###")
+        print(flow_output.literary_description)
+        print("")
 
-    print("### Generated Image ###")
-    print("Generated Image")
-    print(flow_output.image_url)
+        print("### Image Prompt ###")
+        print(flow_output.image_prompt)
+        print("")
+
+        print("### Generated Image ###")
+        print("Generated Image")
+        print(flow_output.image_url)
 
 
 if __name__ == "__main__":
