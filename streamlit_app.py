@@ -5,7 +5,7 @@ from loremaster.config import settings
 
 
 def main():
-    concept = st.text_area(placelhoder="Enter a description of your character concept.")
+    concept = st.text_area(placeholder="Enter a description of your character concept.")
     text_style = st.text_input(
         value=settings.DEFAULT_TEXT_STYLE,
         placeholder="Style to be used for textual output.",
