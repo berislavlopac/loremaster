@@ -5,6 +5,8 @@ from loremaster.config import settings
 
 
 def main():
+    generate = False
+
     with st.form("inputs_form"):
         concept = st.text_area(
             label="Character Concept",
@@ -26,33 +28,37 @@ def main():
             value=settings.DEFAULT_PARAGRAPHS,
             placeholder="Number of paragraphs in the literary description.",
         )
-        st.form_submit_button('Generate Character')
+        generate = st.form_submit_button('Generate Character')
 
-    inputs = {
-        "concept": concept,
-        "text_style": text_style,
-        "visual_style": visual_style,
-        "paragraphs": paragraphs,
-    }
+    if generate:
+        inputs = {
+            "concept": concept,
+            "text_style": text_style,
+            "visual_style": visual_style,
+            "paragraphs": paragraphs,
+        }
 
-    flow = scriptorium.LoreMasterFlow()
-    flow_output: scriptorium.FlowOutputs = flow.kickoff(inputs=inputs)
+        flow = scriptorium.LoreMasterFlow()
+        flow_output: scriptorium.FlowOutputs = flow.kickoff(inputs=inputs)
 
-    st.title("Loremaster: Characters")
+        st.title("Loremaster: Characters")
 
-    st.header("Description")
-    st.markdown(flow_output.description)
+        st.header("Description")
+        st.markdown(flow_output.description)
 
-    st.header("Literary Description")
-    st.markdown(flow_output.literary_description)
+        st.header("Literary Description")
+        st.markdown(flow_output.literary_description)
 
-    st.header("Image")
+        st.header("Image")
 
-    st.subheader("Image Prompt")
-    st.markdown(flow_output.image_prompt)
+        st.subheader("Image Prompt")
+        st.markdown(flow_output.image_prompt)
 
-    st.subheader("Generated Image")
-    st.image(str(flow_output.image_url))
+        st.subheader("Generated Image")
+        st.image(str(flow_output.image_url))
+
+    else:
+        st.text("Waiting for a character concept!")
 
 
 if __name__ == "__main__":
