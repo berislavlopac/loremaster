@@ -19,8 +19,8 @@ class Settings(BaseSettings):
     DEFAULT_TEMPERATURE: float = 0.8
     DEBUG: bool = False
 
-    DEFAULT_TEXT_STYLE: str = "General style of fantasy novels."
-    DEFAULT_VISUAL_STYLE: str = "Hand-drawn sketch in sepia tones."
+    DEFAULT_TEXT_STYLE: str = "traditional fantasy novel"
+    DEFAULT_VISUAL_STYLE: str = "hand-drawn pencil sketch"
     DEFAULT_PARAGRAPHS: int = 2
 
     AGENTS_CONFIG_FILE: str = "agents.yaml"

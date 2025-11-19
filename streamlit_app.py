@@ -16,19 +16,16 @@ def main():
             )
         )
         text_style = st.text_input(
-            label="Textual Style",
+            label="Textual style for the literary description",
             value=settings.DEFAULT_TEXT_STYLE,
-            placeholder="Style to be used for textual output.",
-        )
-        visual_style = st.text_input(
-            label="Visual Style",
-            value=settings.DEFAULT_VISUAL_STYLE,
-            placeholder="Style to be used for the generated image.",
         )
         paragraphs = st.number_input(
-            label="Number of Paragraphs",
-            value=settings.DEFAULT_PARAGRAPHS,
-            placeholder="Number of paragraphs in the literary description.",
+            label="Number of paragraphs in the literary description",
+            value=settings.DEFAULT_PARAGRAPHS
+        )
+        visual_style = st.text_input(
+            label="Visual style for the generated image",
+            value=settings.DEFAULT_VISUAL_STYLE
         )
         submit_form = st.form_submit_button('Generate Character')
 
