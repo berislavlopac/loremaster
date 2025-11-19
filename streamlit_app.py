@@ -49,10 +49,10 @@ def main():
     st.header("Image")
 
     st.subheader("Image Prompt")
-    st.markdown(flow_output.image_url)
+    st.markdown(flow_output.image_prompt)
 
     st.subheader("Generated Image")
-    st.image(flow_output.image_url)
+    st.image(str(flow_output.image_url))
 
 
 if __name__ == "__main__":
