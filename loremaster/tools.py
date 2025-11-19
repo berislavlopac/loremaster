@@ -1,5 +1,5 @@
 from io import BytesIO
-
+import base64
 import cloudinary
 import cloudinary.uploader
 from cloudinary.utils import cloudinary_url
@@ -32,7 +32,7 @@ class GeminiImageGeneratorTool(BaseTool):
         "Generates a high-quality image from a text prompt using the Imagen model."
     )
 
-    def _run(self, prompt: str) -> BytesIO:
+    def _run(self, prompt: str) -> str:
         """
         Generates the image and returns a URL or a confirmation message.
         """
@@ -54,25 +54,8 @@ class GeminiImageGeneratorTool(BaseTool):
 
             # --- Example: Save to a file (You'd need io and PIL for this) ---
             image_data = response.generated_images[0].image.image_bytes
-            image_id = uuid7()
-            public_image_id = image_id.hex
-
-            upload_result = cloudinary.uploader.upload(
-                BytesIO(image_data), public_id=public_image_id
-            )
-            # secure_url = upload_result["secure_url"]
-
-            # Optimize delivery by resizing and applying auto-format and auto-quality
-            optimize_url, _ = cloudinary_url(
-                public_image_id, fetch_format="auto", quality="auto"
-            )
-            return optimize_url
-
-            # Transform the image: auto-crop to square aspect_ratio
-            # auto_crop_url, _ = cloudinary_url(image_id, width=500, height=500, crop="auto", gravity="auto")
-            # print(auto_crop_url)
-
-            # return f"SUCCESS: Image generated using Imagen. You would typically retrieve the image data and save/host it now. Confirmation: {response.generated_images[0].seed}."
+            encoded_image = base64.b64encode(image_data).decode('utf-8')
+            return f"data:image/png;base64,{encoded_image}"
         else:
             raise RuntimeError(
                 "ERROR: Image generation failed to return a valid image."
