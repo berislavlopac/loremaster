@@ -36,7 +36,9 @@ def main():
         }
 
         flow = scriptorium.LoreMasterFlow()
-        flow_output: scriptorium.FlowOutputs = flow.kickoff(inputs=inputs)
+
+        with st.spinner("⌛ Generating..."):
+            flow_output: scriptorium.FlowOutputs = flow.kickoff(inputs=inputs)
 
         st.title("Loremaster: Characters")
 

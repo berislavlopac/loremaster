@@ -69,7 +69,6 @@ class GeminiImageTool(BaseTool):
         for part in response.candidates[0].content.parts:
             if part.inline_data:
                 image_data = part.inline_data.data
-
                 encoded_image = base64.b64encode(image_data).decode("utf-8")
                 return f"data:image/png;base64,{encoded_image}"
 
