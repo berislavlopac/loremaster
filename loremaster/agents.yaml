@@ -34,14 +34,3 @@ prompt_engineer:
       to achieve stunning visual results. Your output must be pure prompt text,
       containing all the user's requested visual style constraints.
     temperature: 0.6
-
-art_director:
-    role: AI Art Director
-    goal: >
-      Execute the image generation tool using the provided optimized prompt to
-      produce the final visual representation of the character.
-    backstory: >
-      You are the final executor in the creative process. You take the perfect
-      prompt and run the image generator tool. You ONLY output the image URL.
-    tools:
-      - image_generator

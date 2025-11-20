@@ -1,4 +1,5 @@
 from pathlib import Path
+from typing import Literal
 
 from pydantic_settings import BaseSettings, SettingsConfigDict
 import yaml
@@ -14,8 +15,10 @@ class Settings(BaseSettings):
     CLOUD_API_KEY: str
     CLOUD_API_SECRET: str
 
+    IMAGE_GENERATION_TOOL: Literal["gemini", "imagen"] = "imagen"
     GEMINI_MODEL: str = "gemini/gemini-2.5-flash"
-    GEMINI_IMAGE_MODEL: str = "imagen-4.0-generate-001"
+    GEMINI_IMAGE_MODEL: str = "gemini-2.5-flash-image"
+    IMAGEN_MODEL: str = "imagen-4.0-generate-001"
     DEFAULT_TEMPERATURE: float = 0.8
     DEBUG: bool = False
 
@@ -24,11 +27,8 @@ class Settings(BaseSettings):
     DEFAULT_PARAGRAPHS: int = 2
 
     AGENTS_CONFIG_FILE: str = "agents.yaml"
+    MAX_RETRIES: int = 1
     IMAGES_DIR_PATH: str = "images"
-
-    @property
-    def images_dir(self) -> Path:
-        return BASE_DIR / self.IMAGES_DIR_PATH
 
     @property
     def agents(self):

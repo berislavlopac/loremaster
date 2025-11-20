@@ -40,7 +40,13 @@ def main(
             help="Number of paragraphs in the literary description.",
         ),
     ] = settings.DEFAULT_PARAGRAPHS,
-    plot: Annotated[bool, typer.Option("--plot", help="Generate the plot of the agentic flow. Ignore all other options.")] = False,
+    plot: Annotated[
+        bool,
+        typer.Option(
+            "--plot",
+            help="Generate the plot of the agentic flow. Ignore all other options.",
+        ),
+    ] = False,
 ):
     inputs = {
         "concept": concept,

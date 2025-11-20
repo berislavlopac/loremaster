@@ -2,18 +2,15 @@ from crewai import LLM, Agent, Flow
 from crewai.flow.flow import and_, listen, start
 from pydantic import AnyUrl, BaseModel
 
+from loremaster import tools
 from loremaster.config import settings
-from loremaster.tools import GeminiImageGeneratorTool
 
-# --- TOOLS ---
-# The image generator tool will be used by the ArtDirector Agent
-available_tools = {"image_generator": GeminiImageGeneratorTool}
+image_generator = tools.image_generation[settings.IMAGE_GENERATION_TOOL]
 
 # --- AGENTS ---
 agents = {}
 for name, conf in settings.agents.items():
     temperature = conf.pop("temperature", settings.DEFAULT_TEMPERATURE)
-    tools = [available_tools[tool]() for tool in conf.pop("tools", [])]
     agents[name] = Agent(
         **conf,
         verbose=settings.DEBUG,
@@ -23,18 +20,16 @@ for name, conf in settings.agents.items():
             api_key=settings.GEMINI_API_KEY,
             temperature=temperature,
         ),
-        tools=tools,
+        max_retry_limit=settings.MAX_RETRIES,
     )
 
 
 # --- FLOW ---
-
-
 class FlowOutputs(BaseModel):
     description: str
     literary_description: str
     image_prompt: str
-    image_url: AnyUrl
+    image_url: str
 
 
 class LoreMasterFlow(Flow):
@@ -50,7 +45,7 @@ class LoreMasterFlow(Flow):
             " of clear and detailed description."
         ).format(**self.state)
         result = agent.kickoff(query)
-        self.state["description"] = result
+        self.state["description"] = str(result)
 
     @listen(observe)
     def describe(self):
@@ -65,7 +60,7 @@ class LoreMasterFlow(Flow):
             " The output MUST be the narrative description only."
         ).format(**self.state)
         result = agent.kickoff(query)
-        self.state["literary_description"] = result
+        self.state["literary_description"] = str(result)
 
     @listen(observe)
     def visualise(self):
@@ -79,25 +74,17 @@ class LoreMasterFlow(Flow):
             " Your final output MUST be the prompt string only (no extra commentary or text)."
         ).format(**self.state)
         result = agent.kickoff(query)
-        self.state["image_prompt"] = result
+        self.state["image_prompt"] = str(result)
 
     @listen(visualise)
     def illuminate(self):
         """Generate image based on the generated prompt."""
         print("--- Illuminating...")
-        agent = agents["art_director"]
-        query = (
-            "Use the provided optimized image prompt to call the image generation tool and generate the final image."
-            " Image prompt:\n\n{image_prompt}"
-        ).format(**self.state)
-        result = agent.kickoff(query)
-        self.state["image_url"] = result
+        image_generator = tools.image_generation[settings.IMAGE_GENERATION_TOOL]
+        image_tool = image_generator()
+        result = image_tool._run(self.state["image_prompt"])
+        self.state["image_url"] = str(result)
 
     @listen(and_(describe, illuminate))
     def collect(self):
-        return FlowOutputs(
-            description=str(self.state["description"]),
-            literary_description=str(self.state["literary_description"]),
-            image_prompt=str(self.state["image_prompt"]),
-            image_url=str(self.state["image_url"]),
-        )
+        return FlowOutputs.model_validate(self.state)
