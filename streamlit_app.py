@@ -43,18 +43,18 @@ def main():
             flow_output: scriptorium.FlowOutputs = flow.kickoff(inputs=inputs)
 
         st.header("Description")
-        description = st.markdown(flow_output.description)
-        st_copy_to_clipboard(description)
+        st.markdown(flow_output.description)
+        st_copy_to_clipboard(flow_output.description)
 
         st.header("Literary Description")
-        literary_description = st.markdown(flow_output.literary_description)
-        st_copy_to_clipboard(literary_description)
+        st.markdown(flow_output.literary_description)
+        st_copy_to_clipboard(flow_output.literary_description)
 
         st.header("Image")
 
         st.subheader("Image Prompt")
-        image_prompt = st.markdown(flow_output.image_prompt)
-        st_copy_to_clipboard(image_prompt)
+        st.markdown(flow_output.image_prompt)
+        st_copy_to_clipboard(flow_output.image_prompt)
 
         st.subheader("Generated Image")
         st.image(str(flow_output.image_url))
