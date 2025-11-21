@@ -30,7 +30,7 @@ class ImagenTool(BaseTool):
         """
         # Call the Imagen model via the Gemini client
         response = gemini_client.models.generate_images(
-            model=settings.GEMINI_IMAGE_MODEL,
+            model=settings.IMAGEN_MODEL,
             prompt=prompt,
             config=genai.types.GenerateImagesConfig(
                 number_of_images=1,

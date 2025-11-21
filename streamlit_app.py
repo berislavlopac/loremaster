@@ -5,6 +5,8 @@ from loremaster.config import settings
 
 
 def main():
+    st.title("Loremaster: A Character Generator")
+
     with st.form("inputs_form"):
         concept = st.text_area(
             label="Character Concept",
@@ -37,10 +39,8 @@ def main():
 
         flow = scriptorium.LoreMasterFlow()
 
-        with st.spinner("⌛ Generating..."):
+        with st.spinner("⌛ Generating new character..."):
             flow_output: scriptorium.FlowOutputs = flow.kickoff(inputs=inputs)
-
-        st.title("Loremaster: Characters")
 
         st.header("Description")
         st.markdown(flow_output.description)
