@@ -1381,6 +1381,7 @@ dependencies = [
     { name = "pydantic" },
     { name = "pydantic-settings" },
     { name = "pyyaml" },
+    { name = "st-copy-to-clipboard" },
     { name = "streamlit" },
     { name = "typer" },
 ]
@@ -1402,6 +1403,7 @@ requires-dist = [
     { name = "pydantic", specifier = ">=2.12.4" },
     { name = "pydantic-settings", specifier = ">=2.12.0" },
     { name = "pyyaml", specifier = ">=6.0.3" },
+    { name = "st-copy-to-clipboard", specifier = ">=0.1.6" },
     { name = "streamlit", specifier = ">=1.51.0" },
     { name = "typer", specifier = ">=0.20.0" },
 ]
@@ -3284,6 +3286,19 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/db/3c/fa6517610dc641262b77cc7bf994ecd17465812c1b0585fe33e11be758ab/sse_starlette-3.0.3.tar.gz", hash = "sha256:88cfb08747e16200ea990c8ca876b03910a23b547ab3bd764c0d8eb81019b971", size = 21943, upload-time = "2025-10-30T18:44:20.117Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/23/a0/984525d19ca5c8a6c33911a0c164b11490dd0f90ff7fd689f704f84e9a11/sse_starlette-3.0.3-py3-none-any.whl", hash = "sha256:af5bf5a6f3933df1d9c7f8539633dc8444ca6a97ab2e2a7cd3b6e431ac03a431", size = 11765, upload-time = "2025-10-30T18:44:18.834Z" },
+]
+
+[[package]]
+name = "st-copy-to-clipboard"
+version = "0.1.6"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "jinja2" },
+    { name = "streamlit" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/3d/6c/bb8ba23b226259974c3a57d122ceccdfd298e6fc3dd9da193716577c8042/st-copy-to-clipboard-0.1.6.tar.gz", hash = "sha256:76634e74384335f64d80469bfe2ca31d15806a140cb89490321764b235acaae6", size = 5046, upload-time = "2024-03-30T16:41:11.581Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/40/9b/aca2dfca2bebe2850f83bb0536bfb8836ad39ec7f8086299ae8a60c41558/st_copy_to_clipboard-0.1.6-py3-none-any.whl", hash = "sha256:2a3eed0beb550548b04ac8a4e12c0fb09726654a15c302acb035454948b01cd1", size = 6024, upload-time = "2024-03-30T16:41:09.414Z" },
 ]
 
 [[package]]
