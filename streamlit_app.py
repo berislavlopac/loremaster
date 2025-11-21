@@ -1,8 +1,9 @@
+from st_copy_to_clipboard import st_copy_to_clipboard
 import streamlit as st
 
 from loremaster import scriptorium
 from loremaster.config import settings
-from st_copy_to_clipboard import st_copy_to_clipboard
+
 
 def main():
     st.title("Loremaster: A Character Generator")
@@ -44,17 +45,29 @@ def main():
 
         st.header("Description")
         st.markdown(flow_output.description)
-        st_copy_to_clipboard(flow_output.description)
+        st_copy_to_clipboard(
+            flow_output.description,
+            before_copy_label="📋 Copy description",
+            after_copy_label="✅ Copied!",
+        )
 
         st.header("Literary Description")
         st.markdown(flow_output.literary_description)
-        st_copy_to_clipboard(flow_output.literary_description)
+        st_copy_to_clipboard(
+            flow_output.literary_description,
+            before_copy_label="📋 Copy literary description",
+            after_copy_label="✅ Copied!",
+        )
 
         st.header("Image")
 
         st.subheader("Image Prompt")
         st.markdown(flow_output.image_prompt)
-        st_copy_to_clipboard(flow_output.image_prompt)
+        st_copy_to_clipboard(
+            flow_output.image_prompt,
+            before_copy_label="📋 Copy image prompt",
+            after_copy_label="✅ Copied!",
+        )
 
         st.subheader("Generated Image")
         st.image(str(flow_output.image_url))
